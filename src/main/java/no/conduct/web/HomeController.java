@@ -12,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -72,6 +73,11 @@ public class HomeController {
     public void initNewMember() {
         newProduct = new Product();
 
+    }
+
+    public List<Product> getProducts()
+    {
+        return productRepository.getAll();
     }
 
 }
