@@ -10,7 +10,6 @@
     <ui:define name="content">
 
         <h:form id="list">
-
             <h:dataTable value="#{productRepository.all}" var="item">
                 <h:column><f:facet name="header">ID</f:facet>#{item.id}</h:column>
                 <h:column><f:facet name="header">Navn</f:facet>#{item.name}</h:column>
@@ -20,23 +19,26 @@
             </h:dataTable>
         </h:form>
 
-        <h:panelGroup rendered="#{homeController.edit}">
-            <h2>Endre produkt #{homeController.current.id}</h2>
-            <h:form id="change">
+        <h:form id="change">
+            <h:panelGroup rendered="#{productHolder.current.name != null}">
+                <h2>Endre produkt #{productHolder.current.id}</h2>
+
                 <h:panelGrid columns="3">
                     <h:outputLabel for="name" value="Name:"/>
-                    <h:inputText id="name" value="#{homeController.current.name}"/>
+                    <h:inputText id="name" value="#{productHolder.current.name}"/>
                     <h:message for="name" errorClass="invalid"/>
                     <h:outputLabel for="description" value="Description:"/>
-                    <h:inputText id="description" value="#{homeController.current.description}"/>
+                    <h:inputText id="description" value="#{productHolder.current.description}"/>
                     <h:message for="description" errorClass="invalid"/>
                 </h:panelGrid>
 
-                <p><h:commandButton value="Lagre" action="#{homeController.save}"/></p>
-            </h:form>
-        </h:panelGroup>
+                <h:panelGrid columns="1">
+                    <h:commandButton id="save" value="Lagre" action="#{homeController.save}"/>
+                </h:panelGrid>
 
-        <h:panelGroup rendered="#{!homeController.edit}">
+            </h:panelGroup>
+        </h:form>
+        <h:panelGroup rendered="#{productHolder.current.name == null}">
             <h:form id="register">
                 <h2><h:outputText value="Registrer ny"/></h2>
                 <h:panelGrid columns="3">
@@ -55,10 +57,7 @@
                     </h:panelGrid>
                 </p>
             </h:form>
-
         </h:panelGroup>
-
     </ui:define>
-
 </ui:composition>
 

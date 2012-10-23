@@ -5,6 +5,7 @@ import no.conduct.domain.core.ProductRepository;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
@@ -17,7 +18,6 @@ import java.util.logging.Logger;
  * @author stalet@conduct.no
  */
 @Model
-@Stateful
 public class HomeController {
 
     @Inject
@@ -29,22 +29,15 @@ public class HomeController {
     @Inject
     private FacesContext facesContext;
 
+    @Inject
+    private ProductHolder productHolder;
+
     private Product newProduct;
-
-    private Product current = new Product();
-
-
-    private boolean edit;
-
-    public boolean isEdit() {
-        return edit;
-    }
 
     public void edit(final Product product)
     {
         log.info("Redigerer " + product);
-        this.current = product;
-        edit = true;
+        productHolder.setCurrent(product);
     }
 
     public void delete(final Product product)
@@ -55,14 +48,9 @@ public class HomeController {
 
     public void save()
     {
-        log.info("Lagrer " + current);
-        productRepository.save(current);
-        edit = false;
-        current = new Product();
-    }
-
-    public Product getCurrent() {
-        return current;
+        log.info("Lagrer " + productHolder.getCurrent());
+        productRepository.save(productHolder.getCurrent());
+        productHolder.setCurrent(new Product());
     }
 
     @Produces
