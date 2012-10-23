@@ -3,7 +3,7 @@ package no.conduct.domain.core;
 import javax.persistence.*;
 
 /**
- * @author Ståle Tomten
+ * @author stalet@conduct.no
  */
 @Entity
 @Cacheable
@@ -17,11 +17,14 @@ public class Product {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private String configuration;
+    private String name;
 
-    public Product(final String description, final String configuration) {
+    public Product(final String description, final String name) {
         this.description = description;
-        this.configuration = configuration;
+        this.name = name;
+    }
+
+    public Product() {
     }
 
     public Long getId() {
@@ -36,11 +39,20 @@ public class Product {
         this.description = description;
     }
 
-    public String getConfiguration() {
-        return configuration;
+    public String getName() {
+        return name;
     }
 
-    public void setConfiguration(String configuration) {
-        this.configuration = configuration;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

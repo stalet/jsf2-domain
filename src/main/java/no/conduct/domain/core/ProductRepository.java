@@ -1,9 +1,11 @@
 package no.conduct.domain.core;
 
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -31,7 +33,15 @@ public class ProductRepository {
         final Query query = entityManager.createNamedQuery("getProductById", Product.class);
         query.setParameter("id", id);
         return (Product) query.getSingleResult();
+    }
 
+    public void remove(final Product product)
+    {
+        entityManager.remove(product);
+    }
+
+    public Product add(final Product product){
+        return entityManager.merge(product);
     }
 
 }
