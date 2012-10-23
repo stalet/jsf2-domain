@@ -35,13 +35,13 @@ public class ProductRepository {
         return (Product) query.getSingleResult();
     }
 
-    public void remove(final Product product)
+    public void remove(Product product)
     {
-        entityManager.remove(product);
+        entityManager.remove(entityManager.merge(product));
     }
 
-    public Product add(final Product product){
-        return entityManager.merge(product);
+    public Product save(final Product product){
+        return entityManager.merge(entityManager.merge(product));
     }
 
 }

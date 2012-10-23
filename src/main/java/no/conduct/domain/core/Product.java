@@ -29,7 +29,7 @@ public class Product {
     @NotNull
     @Column(unique = true, nullable = false)
     @Size(min = 1, max = 25)
-    @Pattern(regexp = "[A-Za-z ]*", message = "Kan kun inneholde bokstaver, tall og space")
+    @Pattern(regexp = "[A-Za-z ]*", message = "Kan kun inneholde bokstaver, tall og space   ")
     private String name;
 
     public Product(final String description, final String name) {

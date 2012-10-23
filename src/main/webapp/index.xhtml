@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/WEB-INF/templates/template.xhtml">
 
@@ -8,45 +9,54 @@
 
     <ui:define name="content">
 
-        <h:form>
+        <h:form id="list">
 
-            <table>
-
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                </tr>
-
-                <ui:repeat value="#{productRepository.all}" var="product">
-                    <tr>
-                        <td><h:outputText value="#{product.id}"/></td>
-                        <td><h:outputText value="#{product.name}"/></td>
-                        <td><h:outputText value="#{product.description}"/></td>
-                    </tr>
-                </ui:repeat>
-
-            </table>
-
-            <h2><h:outputText value="Registrer ny"/></h2>
-            <h:panelGrid columns="3">
-                <h:outputLabel for="name" value="Name:"/>
-                <h:inputText id="name" value="#{newProduct.name}"/>
-                <h:message for="name" errorClass="invalid"/>
-                <h:outputLabel for="description" value="Description:"/>
-                <h:inputText id="description" value="#{newProduct.description}"/>
-                <h:message for="description" errorClass="invalid"/>
-            </h:panelGrid>
-
-            <p>
-                <h:panelGrid columns="2">
-                    <h:commandButton id="register" action="#{homeController.registerProduct}" value="Registrer"/>
-                    <h:messages styleClass="messages" errorClass="invalid" infoClass="valid" warnClass="warning"
-                                globalOnly="true"/>
-                </h:panelGrid>
-            </p>
-
+            <h:dataTable value="#{productRepository.all}" var="item">
+                <h:column><f:facet name="header">ID</f:facet>#{item.id}</h:column>
+                <h:column><f:facet name="header">Navn</f:facet>#{item.name}</h:column>
+                <h:column><f:facet name="header">Beskrivelse</f:facet>#{item.description}</h:column>
+                <h:column><h:commandButton value="endre" action="#{homeController.edit(item)}"/></h:column>
+                <h:column><h:commandButton value="slett" action="#{homeController.delete(item)}"/></h:column>
+            </h:dataTable>
         </h:form>
+
+        <h:panelGroup rendered="#{homeController.edit}">
+            <h2>Endre produkt #{homeController.current.id}</h2>
+            <h:form id="change">
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="name" value="Name:"/>
+                    <h:inputText id="name" value="#{homeController.current.name}"/>
+                    <h:message for="name" errorClass="invalid"/>
+                    <h:outputLabel for="description" value="Description:"/>
+                    <h:inputText id="description" value="#{homeController.current.description}"/>
+                    <h:message for="description" errorClass="invalid"/>
+                </h:panelGrid>
+
+                <p><h:commandButton value="Lagre" action="#{homeController.save}"/></p>
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{!homeController.edit}">
+            <h:form id="register">
+                <h2><h:outputText value="Registrer ny"/></h2>
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="name" value="Name:"/>
+                    <h:inputText id="name" value="#{newProduct.name}"/>
+                    <h:message for="name" errorClass="invalid"/>
+                    <h:outputLabel for="description" value="Description:"/>
+                    <h:inputText id="description" value="#{newProduct.description}"/>
+                    <h:message for="description" errorClass="invalid"/>
+                </h:panelGrid>
+                <p>
+                    <h:panelGrid columns="2">
+                        <h:commandButton id="register" action="#{homeController.registerProduct}" value="Registrer"/>
+                        <h:messages styleClass="messages" errorClass="invalid" infoClass="valid" warnClass="warning"
+                                    globalOnly="true"/>
+                    </h:panelGrid>
+                </p>
+            </h:form>
+
+        </h:panelGroup>
 
     </ui:define>
 

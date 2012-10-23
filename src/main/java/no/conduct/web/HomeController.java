@@ -31,6 +31,40 @@ public class HomeController {
 
     private Product newProduct;
 
+    private Product current = new Product();
+
+
+    private boolean edit;
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void edit(final Product product)
+    {
+        log.info("Redigerer " + product);
+        this.current = product;
+        edit = true;
+    }
+
+    public void delete(final Product product)
+    {
+        log.info("Sletter " + product);
+        productRepository.remove(product);
+    }
+
+    public void save()
+    {
+        log.info("Lagrer " + current);
+        productRepository.save(current);
+        edit = false;
+        current = new Product();
+    }
+
+    public Product getCurrent() {
+        return current;
+    }
+
     @Produces
     @Named
     public Product getNewProduct()
@@ -41,8 +75,9 @@ public class HomeController {
     public void registerProduct()
     {
         log.info("Registrerer nytt produkt:" + newProduct);
-        productRepository.add(newProduct);
+        productRepository.save(newProduct);
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful"));
+        initNewMember();
     }
 
     @PostConstruct
